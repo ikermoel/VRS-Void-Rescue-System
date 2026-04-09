@@ -1,0 +1,14 @@
+.DS_Store
+**/.DS_Store
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Local analysis environment
+**/.viz-venv/
+
+# Large training checkpoints and raw torch saves
+*.pt
+**/*.pt
