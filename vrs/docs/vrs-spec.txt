@@ -287,3 +287,7 @@ DOI
 Zenodo DOI:
 
 `10.5281/zenodo.19477224`
+
+Zenodo record:
+
+`https://zenodo.org/records/19477224`
