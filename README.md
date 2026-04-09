@@ -19,6 +19,8 @@ I call these regions **voids**.
 
 It is not presented as a generic efficiency trick. It is a **new auxiliary decoder** aimed at a geometric decoding failure mode specific to regression.
 
+![VRS architecture overview](figures/figure_01_vrs_architecture_overview.svg)
+
 ## Why This Matters
 
 - It gives an explicit geometric interpretation of a regression-specific decoding failure.
@@ -57,10 +59,6 @@ This matters because `val_bpb_A` is only an **internal raw-path probe** inside a
 ![Figure 5: VRS vs regression-only baselines](figures/figure_05_vrs_vs_regression_baselines.png)
 
 ## Visual Proof of the Rescue Effect
-
-**Figure 1** shows the training and inference pipeline: Navigator, Rescue model, and shared embedding-table decoding.
-
-![Figure 1: Architecture](figures/figure_01_vrs_architecture_pipeline.png)
 
 **Figure 6A** shows the 2D PCA view of target embeddings, raw Navigator outputs, and rescued outputs.
 
