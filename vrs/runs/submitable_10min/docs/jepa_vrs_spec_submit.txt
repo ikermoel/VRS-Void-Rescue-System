@@ -317,25 +317,3 @@ Continue from checkpoint (same total budget):
   MAX_WALLCLOCK_SECONDS=<total_seconds> CHECKPOINT_PATH=./checkpoint_jepa_vrs.pt \
   [same other vars] torchrun --standalone --nproc_per_node=8 train_jepa_vrs.py
   NOTE: MAX_WALLCLOCK_SECONDS must be TOTAL elapsed target, not additional time.
-
-
-
-
-
-
-
-
-
-Me gusta — es elegante y no requiere lógica adaptativa compleja. Es simplemente un scheduler más agresivo para el Rescuer.
-La intuición es correcta: el Rescuer necesita aprender la geometría básica rápido al inicio (LR alto) y luego estabilizarse antes de que el Navigator se aleje demasiado (decay agresivo).
-El análisis de Claude Code es sólido:
-Step 200:  Rescuer LR = 0.036  — aprende geometría básica rápido
-Step 6800: Rescuer LR = 0.010  — estable, Navigator no lo deja atrás
-Step 20000: Rescuer LR = ~0.005 — casi fijo, solo refinamiento
-Eso es exactamente el comportamiento que necesitabas para el run de 1 hora.
-Para el paper esta decisión de diseño es un hallazgo en sí mismo — no es solo un trick de entrenamiento, es una observación sobre la dinámica de co-entrenamiento de dos módulos con responsabilidades distintas:
-"El Rescuer requiere un warmdown más agresivo que el Navigator para mantener co-evolución estable. Esto refleja la asimetría fundamental entre aprender geometría contextual (Navigator, tarea continua) y aprender topología de embeddings (Rescuer, tarea que converge más rápido)."
-Deja correr el run y mándame los números. Si llega a step 13,000+ sin divergencia, tienes el resultado del run de 1 hora que faltaba.
-
-"La divergencia observada en runs extendidos no era un problema arquitectural de JEPA-VRS — era un problema de scheduler. El LR del Rescuer permanecía demasiado alto en late training cuando el warmdown estaba calibrado para runs largos. La solución: aplicar el mismo warmdown de los runs de 10 minutos y continuar con LR_MIN_SCALE=0.02. Con este fix, JEPA-VRS es estable indefinidamente."
-
